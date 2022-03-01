@@ -1,0 +1,19 @@
+[package]
+name = "zpool-stats"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+libzetta = "0.2.3"
+collectd-plugin = "0.14"
+libc = "*"
+
+[lib]
+crate-type = ["cdylib"]
+name = "zpool_stats"
+
+[features]
+bindgen = ["collectd-plugin/bindgen"]
+default = []

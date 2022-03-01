@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+	"bsd-temp",
+	"zpool-stats",
+]

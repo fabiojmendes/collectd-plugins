@@ -1,0 +1,18 @@
+[package]
+name = "bsd-temp"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+sysctl = "0.4"
+collectd-plugin = "0.14"
+
+[lib]
+crate-type = ["cdylib"]
+name = "bsd_temp"
+
+[features]
+bindgen = ["collectd-plugin/bindgen"]
+default = []
