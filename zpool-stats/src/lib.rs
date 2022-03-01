@@ -16,15 +16,6 @@ impl PluginManager for ZpoolStats {
         "zfs_pool"
     }
 
-    // fn initialize() -> Result<(), Box<dyn error::Error>> {
-    //     // Collectd bleeds SIGCHLD into the plugins
-    //     // https://www.mail-archive.com/collectd@verplant.org/msg03931.html
-    //     unsafe {
-    //         libc::signal(libc::SIGCHLD, libc::SIG_DFL);
-    //     }
-    //     Ok(())
-    // }
-
     fn plugins(
         _config: Option<&[ConfigItem<'_>]>,
     ) -> Result<PluginRegistration, Box<dyn error::Error>> {
