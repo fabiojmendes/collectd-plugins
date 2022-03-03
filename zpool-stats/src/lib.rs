@@ -3,8 +3,8 @@ use libzetta::zpool::{ZpoolEngine, ZpoolOpen3};
 use std::error;
 
 use collectd_plugin::{
-    collectd_plugin, ConfigItem, Plugin, PluginCapabilities, PluginManager, PluginRegistration,
-    Value, ValueListBuilder,
+    collectd_plugin, ConfigItem, Plugin, PluginCapabilities, PluginManager,
+    PluginManagerCapabilities, PluginRegistration, Value, ValueListBuilder,
 };
 
 struct ZpoolStats {
@@ -16,15 +16,22 @@ impl PluginManager for ZpoolStats {
         "zfs_pool"
     }
 
-    fn plugins(
-        _config: Option<&[ConfigItem<'_>]>,
-    ) -> Result<PluginRegistration, Box<dyn error::Error>> {
+    fn capabilities() -> PluginManagerCapabilities {
+        PluginManagerCapabilities::INIT
+    }
+
+    fn initialize() -> Result<(), Box<dyn error::Error>> {
         // Collectd bleeds SIGCHLD into the plugins
         // https://www.mail-archive.com/collectd@verplant.org/msg03931.html
         unsafe {
             libc::signal(libc::SIGCHLD, libc::SIG_DFL);
         }
+        Ok(())
+    }
 
+    fn plugins(
+        _config: Option<&[ConfigItem<'_>]>,
+    ) -> Result<PluginRegistration, Box<dyn error::Error>> {
         let engine = ZpoolOpen3::default();
         let plugin = Box::new(ZpoolStats { engine });
         Ok(PluginRegistration::Single(plugin))

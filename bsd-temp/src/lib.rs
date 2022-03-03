@@ -11,7 +11,7 @@ struct BSDTemp {
     ctls: Vec<(String, Ctl)>,
 }
 
-fn parse_config<'a>(item: &'a ConfigItem) -> Option<(&'a str, &'a str)> {
+fn parse_config_item<'a>(item: &'a ConfigItem) -> Option<(&'a str, &'a str)> {
     let &name = match item.values.get(0)? {
         ConfigValue::String(str) => str,
         _ => return None,
@@ -34,11 +34,10 @@ impl PluginManager for BSDTemp {
         let mut ctls = Vec::new();
         for item in config.ok_or("no config found")? {
             let (name, label) =
-                parse_config(item).ok_or(format!("error parsing config item: {:?}", item))?;
-            ctls.push((String::from(label), Ctl::new(name)?));
-            // TODO Remove debug logs
+                parse_config_item(item).ok_or(format!("error parsing config item: {:?}", item))?;
             let line = format!("bsd_temp config: {:?} {:?}", name, label);
-            cld::collectd_log(LogLevel::Info, &line);
+            cld::collectd_log(LogLevel::Debug, &line);
+            ctls.push((String::from(label), Ctl::new(name)?));
         }
         let plugin = Box::new(BSDTemp { ctls });
         Ok(PluginRegistration::Single(plugin))
