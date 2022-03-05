@@ -6,21 +6,34 @@ use collectd_plugin::{
 use std::error;
 use sysctl::{Ctl, CtlValue, Sysctl};
 
+/// Here is what our collectd config can look like:
+///
+/// ```
+/// LoadPlugin bsd_temp
+/// <Plugin bsd_temp>
+///   <Ctl "sysctl.node.name" "optionalLabel">
+///   <Ctl "sysctl.node.name">
+/// </Plugin>
+/// ```
 #[derive(Debug)]
 struct BSDTemp {
     ctls: Vec<(String, Ctl)>,
 }
 
-fn parse_config_item<'a>(item: &'a ConfigItem) -> Option<(&'a str, &'a str)> {
-    let &name = match item.values.get(0)? {
-        ConfigValue::String(str) => str,
-        _ => return None,
+fn parse_config<'a>(item: &ConfigItem<'a>) -> Result<(String, Ctl), Box<dyn error::Error>> {
+    let name = match item.values.first() {
+        Some(ConfigValue::String(str)) => *str,
+        _ => return Err(format!("syntax error {:?}", item))?,
     };
-    let &label = match item.values.get(1)? {
-        ConfigValue::String(str) => str,
-        _ => return None,
+    let label = match item.values.get(1) {
+        Some(ConfigValue::String(str)) => str,
+        _ => name,
     };
-    Some((name, label))
+    cld::collectd_log(
+        LogLevel::Debug,
+        &format!("bsd_temp config: {:?} {:?}", name, label),
+    );
+    Ok((String::from(label), Ctl::new(name)?))
 }
 
 impl PluginManager for BSDTemp {
@@ -31,14 +44,11 @@ impl PluginManager for BSDTemp {
     fn plugins(
         config: Option<&[ConfigItem<'_>]>,
     ) -> Result<PluginRegistration, Box<dyn error::Error>> {
-        let mut ctls = Vec::new();
-        for item in config.ok_or("no config found")? {
-            let (name, label) =
-                parse_config_item(item).ok_or(format!("error parsing config item: {:?}", item))?;
-            let line = format!("bsd_temp config: {:?} {:?}", name, label);
-            cld::collectd_log(LogLevel::Debug, &line);
-            ctls.push((String::from(label), Ctl::new(name)?));
-        }
+        let ctls: Vec<_> = config
+            .ok_or("no config provided")?
+            .iter()
+            .map(parse_config)
+            .collect::<Result<_, _>>()?;
         let plugin = Box::new(BSDTemp { ctls });
         Ok(PluginRegistration::Single(plugin))
     }
