@@ -48,38 +48,38 @@ impl Plugin for ZpoolStats {
             let name = pool.name();
             let health_label = format!("{:?}", pool.health());
             let health_code = pool.health().clone() as u8;
-            let health = vec![Value::Gauge(health_code as f64)];
+            let health = [Value::Gauge(health_code as f64)];
             ValueListBuilder::new(Self::name(), "health")
                 .plugin_instance(&name[..])
                 .type_instance(&health_label[..])
                 .values(&health)
                 .submit()?;
             if let Ok(props) = self.engine.read_properties(pool.name()) {
-                let alloc = vec![Value::Gauge(*props.alloc() as f64)];
+                let alloc = [Value::Gauge(*props.alloc() as f64)];
                 ValueListBuilder::new(Self::name(), "bytes")
                     .plugin_instance(&name[..])
                     .type_instance("allocated")
                     .values(&alloc)
                     .submit()?;
-                let free = vec![Value::Gauge(*props.free() as f64)];
+                let free = [Value::Gauge(*props.free() as f64)];
                 ValueListBuilder::new(Self::name(), "bytes")
                     .plugin_instance(&name[..])
                     .type_instance("free")
                     .values(&free)
                     .submit()?;
-                let size = vec![Value::Gauge(*props.size() as f64)];
+                let size = [Value::Gauge(*props.size() as f64)];
                 ValueListBuilder::new(Self::name(), "bytes")
                     .plugin_instance(&name[..])
                     .type_instance("size")
                     .values(&size)
                     .submit()?;
-                let fragmentation = vec![Value::Gauge(*props.fragmentation() as f64)];
+                let fragmentation = [Value::Gauge(*props.fragmentation() as f64)];
                 ValueListBuilder::new(Self::name(), "percent")
                     .plugin_instance(&name[..])
                     .type_instance("fragmentation")
                     .values(&fragmentation)
                     .submit()?;
-                let capacity = vec![Value::Gauge(*props.capacity() as f64)];
+                let capacity = [Value::Gauge(*props.capacity() as f64)];
                 ValueListBuilder::new(Self::name(), "percent")
                     .plugin_instance(&name[..])
                     .type_instance("capacity")

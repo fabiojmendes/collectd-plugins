@@ -61,9 +61,8 @@ impl Plugin for BSDTemp {
 
     fn read_values(&self) -> Result<(), Box<dyn error::Error>> {
         for (label, ctl) in &self.ctls {
-            let val_enum = ctl.value()?;
-            if let CtlValue::Temperature(val) = val_enum {
-                let values = vec![Value::Gauge(val.celsius() as f64)];
+            if let CtlValue::Temperature(val) = ctl.value()? {
+                let values = [Value::Gauge(val.celsius() as f64)];
                 ValueListBuilder::new(Self::name(), "temperature")
                     .plugin_instance(&label[..])
                     .values(&values)
