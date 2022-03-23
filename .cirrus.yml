@@ -1,7 +1,7 @@
 freebsd_instance:
   image_family: freebsd-13-0
 
-task:
+buld_task:
   env:
     PATH: ${HOME}/.cargo/bin:${PATH}
   install_script: |
@@ -9,3 +9,11 @@ task:
     curl https://sh.rustup.rs -sSf | sh -s -- -y
   check_script: cargo clippy
   build_script: cargo build --release
+
+deploy_task:
+  depends_on: 
+    - build
+  env:
+    GITHUB_TOKEN: ENCRYPTED[qwerty]
+  script: |
+    echo "Deploy using $ENCRYPTED"
