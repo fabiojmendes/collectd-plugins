@@ -8,15 +8,9 @@ build_task:
     curl https://sh.rustup.rs -sSf | sh -s -- -y
   check_script: cargo clippy
   build_script: cargo build --release
-  list_script: ls target/release
-  binaries_artifacts:
-    path: target/release/lib*
-
-deploy_task:
-  depends_on: 
-    - build
-  env:
-    GITHUB_TOKEN: ENCRYPTED[qwerty]
-  script: |
-    ls target/release
-    echo "Deploy using $ENCRYPTED"
+  package_script: |
+    mkdir collectd-plugins && cd $_
+    cp ../target/release/lib*.so ./
+    for f in ./*.so ; do mv "$f" "${f/lib/}"; done
+  collectd-plugins_artifacts:
+    path: collectd-plugins/*
