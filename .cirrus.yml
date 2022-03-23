@@ -1,7 +1,7 @@
 freebsd_instance:
   image_family: freebsd-13-0
 
-buld_task:
+build_task:
   env:
     PATH: ${HOME}/.cargo/bin:${PATH}
   install_script: |
