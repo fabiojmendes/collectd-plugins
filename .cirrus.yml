@@ -4,7 +4,6 @@ freebsd_instance:
 build_task:
   env:
     PATH: ${HOME}/.cargo/bin:${PATH}
-    CIRRUS_SHELL: bash
   install_script: |
     curl https://sh.rustup.rs -sSf | sh -s -- -y
   check_script: cargo clippy
@@ -12,6 +11,6 @@ build_task:
   package_script: |
     mkdir package
     cp target/release/*.so ./package/
-    for f in ./package/*.so ; do mv "$f" "${f/lib/}"; done
+    # for f in ./package/*.so ; do mv "$f" "${f#lib}"; done
   collectd-plugins_artifacts:
     path: package/*
