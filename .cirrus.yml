@@ -6,5 +6,5 @@ task:
     pkg install -y curl
     curl https://sh.rustup.rs -sSf | sh -s -- -y
     export PATH="$HOME/.cargo/bin:$PATH"
-  check_script: cargo clippy
-  build_script: cargo build --release
+  check_script: $HOME/.cargo/bin/cargo clippy
+  build_script: $HOME/.cargo/bin/cargo build --release
