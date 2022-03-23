@@ -9,6 +9,7 @@ build_task:
   check_script: cargo clippy
   build_script: cargo build --release
   package_script: |
+    #!/bin/bash
     mkdir package
     cp target/release/*.so ./package/
     for f in ./package/*.so ; do mv "$f" "${f/lib/}"; done
