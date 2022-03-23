@@ -2,6 +2,8 @@ freebsd_instance:
   image_family: freebsd-13-0
 
 task:
-  install_script: pkg install -y curl
-  script: curl https://sh.rustup.rs -sSf | sh -s -- -y
-
+  install_script: |
+    pkg install -y curl
+    curl https://sh.rustup.rs -sSf | sh -s -- -y
+  check_script: cargo clippy
+  build_script: cargo build --release

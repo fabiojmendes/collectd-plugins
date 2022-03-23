@@ -20,10 +20,10 @@ struct BSDTemp {
     ctls: Vec<(String, Ctl)>,
 }
 
-fn parse_config<'a>(item: &ConfigItem<'a>) -> Result<(String, Ctl), Box<dyn error::Error>> {
+fn parse_config(item: &ConfigItem) -> Result<(String, Ctl), Box<dyn error::Error>> {
     let name = match item.values.first() {
         Some(ConfigValue::String(str)) => *str,
-        _ => return Err(format!("syntax error {:?}", item))?,
+        _ => return Err(format!("syntax error {:?}", item).into()),
     };
     let label = match item.values.get(1) {
         Some(ConfigValue::String(str)) => str,

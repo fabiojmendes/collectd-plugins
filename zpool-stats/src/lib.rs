@@ -1,4 +1,3 @@
-use libc;
 use libzetta::zpool::{ZpoolEngine, ZpoolOpen3};
 use std::error;
 
