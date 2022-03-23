@@ -2,21 +2,21 @@ name: Rust FreeBSD
 
 env:
   CARGO_TERM_COLOR: always
-  # TARGET: x86_64-unknown-freebsd
+  TARGET: x86_64-unknown-freebsd
 
 on: [push]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
-          target: x86_64-unknown-freebsd
+          target: ${{ env.TARGET }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
           command: clippy
-          args: --target x86_64-unknown-freebsd
+          args: --target $TARGET
