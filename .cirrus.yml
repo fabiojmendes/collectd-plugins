@@ -1,0 +1,7 @@
+freebsd_instance:
+  image_family: freebsd-13-0
+
+task:
+  install_script: pkg install -y curl
+  script: curl https://sh.rustup.rs -sSf | sh -s -- -y
+
