@@ -15,6 +15,8 @@ build_task:
       mv "$f" "${f#lib}"
     done
     cd ..
-    tar -czvf collectd-plugins.tar.gz plugins/ ./debug.conf ./README.md
+    mkdir collectd-plugins
+    mv plugins debug.conf README.md collectd-plugins
+    tar -czvf collectd-plugins.tar.gz collectd-plugins/*
   artifacts:
     path: collectd-plugins.tar.gz
