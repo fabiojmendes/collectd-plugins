@@ -11,6 +11,9 @@ build_task:
   package_script: |
     mkdir package
     cp target/release/*.so ./package/
-    # for f in ./package/*.so ; do mv "$f" "${f#lib}"; done
+    for f in ./package/*.so; do
+      mv "$f" "${f#lib}"
+    done
+    ls ./package/
   collectd-plugins_artifacts:
     path: package/*
