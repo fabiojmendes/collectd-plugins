@@ -16,5 +16,5 @@ build_task:
     done
     cd ..
     tar -czvf collectd-plugins.tar.gz plugins/ ./debug.conf ./README.md
-  collectd-plugins_artifacts:
+  artifacts:
     path: collectd-plugins.tar.gz
