@@ -14,6 +14,7 @@ build_task:
     for f in *.so; do
       mv "$f" "${f#lib}"
     done
-    ls -la
+    cd ..
+    tar -czvf collectd-plugins.tar.gz plugins/ ./debug.conf ./README.md
   collectd-plugins_artifacts:
-    path: ./plugins/* ./debug.conf ./README.md
+    path: collectd-plugins.tar.gz
