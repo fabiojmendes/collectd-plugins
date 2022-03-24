@@ -9,11 +9,11 @@ build_task:
   check_script: cargo clippy
   build_script: cargo build --release
   package_script: |
-    mkdir package
-    cp target/release/*.so ./package/
-    for f in ./package/*.so; do
+    mkdir package && cd package
+    cp ../target/release/*.so ./
+    for f in *.so; do
       mv "$f" "${f#lib}"
     done
-    ls ./package/
+    ls -la
   collectd-plugins_artifacts:
-    path: package/*
+    path: ./package/*
