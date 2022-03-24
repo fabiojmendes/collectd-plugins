@@ -16,7 +16,4 @@ build_task:
     done
     ls -la
   collectd-plugins_artifacts:
-    path: |
-      - ./plugins
-      - ./debug.conf
-      - ./README.md
+    path: ./plugins/* ./debug.conf ./README.md
